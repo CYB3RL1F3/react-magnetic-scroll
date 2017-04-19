@@ -1,0 +1,13 @@
+[ignore]
+.*/node_modules/.*
+
+[include]
+./src/
+./example/app
+
+[libs]
+config/flow-typed/npm
+
+[options]
+suppress_comment=.*\\$FlowFixMe
+suppress_comment=.*\\$FlowInvalidInputTest
