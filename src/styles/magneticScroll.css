@@ -1,0 +1,14 @@
+.panda {
+  width: 100vw;
+  height: 100vh;
+}
+
+.magnetic {
+  width: inherit;
+  height: inherit;
+}
+
+.page {
+  width: 100vw;
+  height: 100vh;
+}
