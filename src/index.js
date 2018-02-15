@@ -52,6 +52,7 @@ class MagneticScroll extends Component {
     window.addEventListener('touchmove', this.onScroll);
     window.addEventListener('touchstart', this.onTouch);
     window.addEventListener('keydown', this.onKeydown);
+    this.currentPage = this.getCurrentPage();
     // scroll events
   }
 
@@ -101,6 +102,8 @@ class MagneticScroll extends Component {
   }
 
   onResize = e => this.resize(e)
+
+  getCurrentPage = () => Math.ceil(window.pageYOffset / this.getTotalHeight());
 
   getTotalHeight = () =>
     this.props.pageHeight * this.getNbPages();
