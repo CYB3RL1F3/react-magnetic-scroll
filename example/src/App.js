@@ -8,6 +8,13 @@ class App extends Component {
     console.log('PAGE END');
   }
 
+  navigateToPage = (e) => {
+    e.preventDefault();
+    console.log(this.magneticScroll);
+    this.magneticScroll.scrollTo(4);
+  }
+
+
   renderPages = () => {
     const pages = [];
     const n = Math.random() * (15 - 5) + 5;
@@ -31,10 +38,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <a className="goto" href="" onClick={this.navigateToPage}>Go to page 4</a>
         <MagneticScroll
           pages={this.renderPages()}
           onPageChangeEnd={this.pageEnd}
           easing="easeInOutQuad"
+          withRef
+          ref={(magneticScroll) => { this.magneticScroll = magneticScroll; }}
         />
       </div>
     );

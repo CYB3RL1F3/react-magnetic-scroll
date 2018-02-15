@@ -142,6 +142,11 @@ class MagneticScroll extends Component {
     });
   }
 
+  scrollTo(page) {
+    this.currentPage = page;
+    this.scrollToCurrentPage();
+  }
+
   scrollUp() {
     if (this.currentPage > 0) {
       this.currentPage -= 1;

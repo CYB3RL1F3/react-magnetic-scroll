@@ -34,7 +34,25 @@ A magic pagination component to navigate with magnetic scroll navigation
   * display magnetic scroll :
 
   ```
-    <MagneticScroll pages={{pages}} ...props />
+    <MagneticScroll pages={{pages}} {...props} />
+  ```
+
+  * scroll to page :
+
+    * add 'ref' property
+    * call scrollTo with the n° of page as argument
+
+  ```
+    <MagneticScroll
+      ref={magneticScroll => { this.magneticScroll = magneticScroll; }}
+      pages={{pages}}
+      {...props}
+    />
+  ```
+
+  ```
+    const gotoPage = (page = 2) =>
+      this.magneticScroll.scrollTo(page);
   ```
 
 ### how it works
