@@ -8,7 +8,7 @@ class App extends Component {
     console.log('PAGE END');
   }
 
-  renderPages () {
+  renderPages = () => {
     const pages = [];
     const page = (
       <div>
@@ -20,7 +20,21 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
       </div>
-    )
+    );
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
+    pages.push(page);
     pages.push(page);
     pages.push(page);
     pages.push(page);

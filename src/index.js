@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import * as Scroll from 'react-scroll';
 
 // import animateScrollTo from 'animated-scroll-to';
 // import { WindowResizeListener } from 'react-window-resize-listener';
@@ -35,7 +34,6 @@ class MagneticScroll extends Component {
       pageHeight: vh(this.props.pageHeight),
     };
     this.options = { ...this.options, ...this.props.scrollOptions };
-    console.log(this.state.pageHeight);
   }
 
   componentWillMount() {
@@ -43,14 +41,12 @@ class MagneticScroll extends Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0);
     window.addEventListener('wheel', this.onScroll);
     window.addEventListener('touchmove', this.onScroll);
     window.addEventListener('touchstart', this.onTouch);
     window.addEventListener('keydown', this.onKeydown);
     // scroll events
-    Scroll.Events.scrollEvent.register('begin', this.onPageChangeStart);
-    Scroll.Events.scrollEvent.register('end', this.onPageChangeEnd);
-    Scroll.scrollSpy.update();
   }
 
   componentWillUpdate() {
@@ -69,7 +65,6 @@ class MagneticScroll extends Component {
   }
 
   onPageChangeEnd = () => {
-    console.log('scroll end');
     this.props.onPageChangeEnd();
     setTimeout(() => {
       this.scrolling = false;
@@ -88,12 +83,14 @@ class MagneticScroll extends Component {
   }
 
   onKeydown = (e) => {
-    switch (e.which) {
-      case 38: this.scrollUp(); // up
-        break;
-      case 40: this.scrollDown(); // down
-        break;
-      default: break; // exit this handler for other keys
+    if (!this.scrolling) {
+      switch (e.which) {
+        case 38: this.scrollUp(); // up
+          break;
+        case 40: this.scrollDown(); // down
+          break;
+        default: break; // exit this handler for other keys
+      }
     }
   }
 
@@ -105,7 +102,6 @@ class MagneticScroll extends Component {
   getNbPages = () => this.props.pages.length;
 
   getScrollPosition(page) {
-    console.log('rend l\'argent, ', this.state.pageHeight, page);
     return this.state.pageHeight * page;
   }
 
@@ -142,20 +138,15 @@ class MagneticScroll extends Component {
   }
 
   scrollDown() {
-    console.log(`this.currentPage == ${this.currentPage}`, `nbPage = ${this.getNbPages()}`);
     if (this.currentPage < this.getNbPages()) {
       this.currentPage += 1;
-      console.log('currentPage => ', this.currentPage);
       this.scrollToCurrentPage();
     }
   }
 
   scrollToCurrentPage() {
-    console.log(`scroll to current page => scrolling === ${this.scrolling}`);
     const position = this.getScrollPosition(this.currentPage);
-    console.log('position === ', position);
     this.onPageChangeStart();
-    console.log('options ==> ', this.options);
     this.animateScrollTo(position, 500);
     // Scroll.animateScroll.scrollTo(position, this.options);
   }
@@ -188,33 +179,28 @@ class MagneticScroll extends Component {
   }
 
   scroll(event) {
-    console.log(`scrolling === ${this.scrolling}`);
     if (!this.scrolling) {
       this.scrolling = true;
-      console.log(`scrolling === ${this.scrolling}`);
-      console.log('get nb pages', this.getNbPages());
       if (event.wheelDelta) {
         const wd = event.wheelDelta;
-        console.log('wheeldelta = ', wd);
-        console.log('currentPage => ', this.currentPage);
         if (wd > 0 && this.currentPage > 0) {
-          return this.scrollUp();
-        } else if (wd < 0 && this.currentPage < this.getNbPages()) {
-          console.log('SCROLL DOWN');
+          this.scrollUp();
+        } else if (wd < 0 && this.currentPage < this.getNbPages() - 1) {
           this.scrollDown();
         } else {
           this.scrolling = false;
         }
       } else if (event.changedTouches) {
         const te = event.changedTouches[0].clientY;
-
-        if (this.ts > te && this.currentPage < this.getNbPages()) {
-          return this.scrollDown();
+        if (this.ts > te && this.currentPage < this.getNbPages() - 1) {
+          this.scrollDown();
         } else if (this.ts < te && this.currentPage > 0) {
           this.scrollUp();
         } else {
           this.scrolling = false;
         }
+      } else {
+        this.scrolling = false;
       }
     }
   }
