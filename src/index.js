@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import MagneticPage from './components/magneticPage';
 import style from './styles/magneticScroll.css';
 import Easing from './easing';
+import debounce from './debounce';
 
 import { vw, vh } from './utils';
 
@@ -81,7 +82,9 @@ class MagneticScroll extends Component {
   onScroll = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.scroll(e);
+    debounce(() => {
+      this.scroll(e);
+    }, 300);
   }
 
   onTouch = (e) => {
@@ -182,11 +185,11 @@ class MagneticScroll extends Component {
     animateScroll();
   }
 
-  scroll(event) {
+  scroll(e) {
     if (!this.scrolling) {
       this.scrolling = true;
-      if (event.wheelDelta) {
-        const wd = event.wheelDelta;
+      if (e.wheelDelta) {
+        const wd = e.wheelDelta;
         if (wd > 0 && this.currentPage > 0) {
           this.scrollUp();
         } else if (wd < 0 && this.currentPage < this.getNbPages() - 1) {
@@ -194,8 +197,8 @@ class MagneticScroll extends Component {
         } else {
           this.scrolling = false;
         }
-      } else if (event.changedTouches) {
-        const te = event.changedTouches[0].clientY;
+      } else if (e.changedTouches) {
+        const te = e.changedTouches[0].clientY;
         if (this.ts > te && this.currentPage < this.getNbPages() - 1) {
           this.scrollDown();
         } else if (this.ts < te && this.currentPage > 0) {
