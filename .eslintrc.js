@@ -10,6 +10,11 @@ module.exports = {
   "rules": {
     "func-names": 0,
     "eol-last": 0,
+    "no-mixed-operators": 0,
+    "no-param-reassign": 0,
+    "no-plusplus": 0,
+    "space-infix-ops": 0,
+    "no-restricted-properties": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-no-bind": [ 2, {
       "ignoreRefs": false,

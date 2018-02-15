@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import MagneticPage from './components/magneticPage';
 import style from './styles/magneticScroll.css';
+import Easing from './easing';
 
 import { vw, vh } from './utils';
 
@@ -17,6 +18,8 @@ class MagneticScroll extends Component {
     onPageChangeStart: PropTypes.func,
     onPageChangeEnd: PropTypes.func,
     scrollOptions: PropTypes.shape(),
+    easing: PropTypes.string,
+    duration: PropTypes.number,
   }
 
   static defaultProps = {
@@ -25,6 +28,8 @@ class MagneticScroll extends Component {
     onPageChangeStart: () => {},
     onPageChangeEnd: () => {},
     scrollOptions: {},
+    easing: 'linear',
+    duration: 500,
   }
 
   constructor(props) {
@@ -34,6 +39,7 @@ class MagneticScroll extends Component {
       pageHeight: vh(this.props.pageHeight),
     };
     this.options = { ...this.options, ...this.props.scrollOptions };
+    this.easing = new Easing();
   }
 
   componentWillMount() {
@@ -147,17 +153,10 @@ class MagneticScroll extends Component {
   scrollToCurrentPage() {
     const position = this.getScrollPosition(this.currentPage);
     this.onPageChangeStart();
-    this.animateScrollTo(position, 500);
+    const { duration } = this.props;
+    this.animateScrollTo(position, duration);
     // Scroll.animateScroll.scrollTo(position, this.options);
   }
-
-  easeInOutQuad = (t2, b, c, d) => {
-    let t = t2;
-    t /= d / 2;
-  	if (t < 1) return c / 2 * t * t + b; //eslint-disable-line
-    t -= 1; // eslint-disable-lint
-  	return -c/2 * (t*(t-2) - 1) + b; // eslint-disable-line
-  };
 
   animateScrollTo = (position, duration) => {
     const start = window.pageYOffset;
@@ -167,7 +166,9 @@ class MagneticScroll extends Component {
 
     const animateScroll = () => {
       currentTime += increment;
-      const val = this.easeInOutQuad(currentTime, start, change, duration);
+      const { easing } = this.props;
+      // const val = this.easeInOutQuad(currentTime, start, change, duration);
+      const val = this.easing.ease(easing, currentTime, start, change, duration);
       window.scrollTo(0, val);
       if (currentTime < duration) {
         setTimeout(animateScroll, increment);
