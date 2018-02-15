@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import animateScrollTo from 'animated-scroll-to';
+import * as Scroll from 'react-scroll';
+
+// import animateScrollTo from 'animated-scroll-to';
 // import { WindowResizeListener } from 'react-window-resize-listener';
 
 import MagneticPage from './components/magneticPage';
@@ -45,6 +47,10 @@ class MagneticScroll extends Component {
     window.addEventListener('touchmove', this.onScroll);
     window.addEventListener('touchstart', this.onTouch);
     window.addEventListener('keydown', this.onKeydown);
+    // scroll events
+    Scroll.Events.scrollEvent.register('begin', this.onPageChangeStart);
+    Scroll.Events.scrollEvent.register('end', this.onPageChangeEnd);
+    Scroll.scrollSpy.update();
   }
 
   componentWillUpdate() {
@@ -65,7 +71,9 @@ class MagneticScroll extends Component {
   onPageChangeEnd = () => {
     console.log('scroll end');
     this.props.onPageChangeEnd();
-    this.scrolling = false;
+    setTimeout(() => {
+      this.scrolling = false;
+    }, 500);
   }
 
   onScroll = (e) => {
@@ -114,19 +122,9 @@ class MagneticScroll extends Component {
 
   options = {
     // duration of the scroll per 1000px, default 500
-    speed: 500,
-
-    // minimum duration of the scroll
-    minDuration: 250,
-
-    // maximum duration of the scroll
-    maxDuration: 1500,
-
-    // DOM element to scroll, default window
-    // Pass a reference to a DOM object
-    // Example: document.querySelector('#element-to-scroll'),
-    element: window,
-    onComplete: this.onPageChangeEnd,
+    duration: 400,
+    delay: 50,
+    smooth: 'easeInOutQuint',
   }
 
   resize() {
@@ -139,17 +137,17 @@ class MagneticScroll extends Component {
   scrollUp() {
     if (this.currentPage > 0) {
       this.currentPage -= 1;
+      this.scrollToCurrentPage();
     }
-    this.scrollToCurrentPage();
   }
 
   scrollDown() {
     console.log(`this.currentPage == ${this.currentPage}`, `nbPage = ${this.getNbPages()}`);
     if (this.currentPage < this.getNbPages()) {
       this.currentPage += 1;
+      console.log('currentPage => ', this.currentPage);
+      this.scrollToCurrentPage();
     }
-    console.log('currentPage => ', this.currentPage);
-    this.scrollToCurrentPage();
   }
 
   scrollToCurrentPage() {
@@ -158,7 +156,35 @@ class MagneticScroll extends Component {
     console.log('position === ', position);
     this.onPageChangeStart();
     console.log('options ==> ', this.options);
-    animateScrollTo(position, this.options);
+    this.animateScrollTo(position, 500);
+    // Scroll.animateScroll.scrollTo(position, this.options);
+  }
+
+  easeInOutQuad = (t2, b, c, d) => {
+    let t = t2;
+    t /= d / 2;
+  	if (t < 1) return c / 2 * t * t + b; //eslint-disable-line
+    t -= 1; // eslint-disable-lint
+  	return -c/2 * (t*(t-2) - 1) + b; // eslint-disable-line
+  };
+
+  animateScrollTo = (position, duration) => {
+    const start = window.pageYOffset;
+    const change = position - start;
+    const increment = 20;
+    let currentTime = 0;
+
+    const animateScroll = () => {
+      currentTime += increment;
+      const val = this.easeInOutQuad(currentTime, start, change, duration);
+      window.scrollTo(0, val);
+      if (currentTime < duration) {
+        setTimeout(animateScroll, increment);
+      } else {
+        this.onPageChangeEnd();
+      }
+    };
+    animateScroll();
   }
 
   scroll(event) {
@@ -170,19 +196,24 @@ class MagneticScroll extends Component {
       if (event.wheelDelta) {
         const wd = event.wheelDelta;
         console.log('wheeldelta = ', wd);
+        console.log('currentPage => ', this.currentPage);
         if (wd > 0 && this.currentPage > 0) {
-          this.scrollUp();
-        } else if (this.currentPage < this.getNbPages()) {
+          return this.scrollUp();
+        } else if (wd < 0 && this.currentPage < this.getNbPages()) {
           console.log('SCROLL DOWN');
           this.scrollDown();
+        } else {
+          this.scrolling = false;
         }
       } else if (event.changedTouches) {
         const te = event.changedTouches[0].clientY;
 
         if (this.ts > te && this.currentPage < this.getNbPages()) {
-          this.scrollDown();
-        } else if (this.currentPage > 0) {
+          return this.scrollDown();
+        } else if (this.ts < te && this.currentPage > 0) {
           this.scrollUp();
+        } else {
+          this.scrolling = false;
         }
       }
     }
