@@ -1,29 +1,64 @@
 
 # react-magnetic-scroll
-React Magnetic Scroll component
-=======
-__NOTICE:__
-Just like with the boilerplate project, we are working on rewriting this with TypeScript.  We'd still love for you to use this and submit PRs, so have at it!
 
-# React Library Starter
-This project can be used to create your next React Component library.  It's configured to give you a starting place for publishing react components to NPM.
+A magic pagination component to navigate with magnetic scroll navigation
 
-## Getting Started
-1. `yarn` or `npm install` if you're old fashioned
-2. Develop components within the `src` directory.  Make sure to export the ones you want in your library from `src/index.js`
-3. Set your libraries name within the root level webpack configuration file's output object and in the package.json.
 
-```
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'index.js',
-    library: 'react-library-starter', // your library's name goes here
-    libraryTarget: 'umd',
-    umdNamedDefine: true,
-  },
-```
-4. Increment the version of your package with `npm version x.x.x`
-5. Run `npm publish` with your code checked into to git and watch as your npm library is born!
+## Using the component :
+1. Install the component :
+
+ ```yarn add react-magnetic-scroll```
+
+2. Import the component that way :
+
+ ```import MagneticScroll from 'react-magnetic-scroll';```
+
+3. Call the component by injecting options :
+
+  * define pages :
+
+  ```
+  const page1 = (
+    <div id="page1"><p>page 1</p></div>
+  );
+  const page2 = (
+    <div id="page2"><p>page 2</p></div>
+  );
+  const page3 = (
+    <div id="page3"><p>page 3</p></div>
+  );
+
+  const pages = [page1, page2, page3];
+  ```
+
+  * display magnetic scroll :
+
+  ```
+    <MagneticScroll pages={{pages}} ...props />
+  ```
+
+### how it works
+
+__MagneticScroll__ uses an array of components, views, etc... and display them in "pages" that have similar width & height. On *scroll*, *keydown* & *touchmove* events, the natural scroll is blocked and the magnetic container autoscroll to the next page.
+
+Values are expressed in viewheights (vh) and viewwidths (vw).
+
+You don't need to wrap your pages. Pages are auto-wrapped by a component *MagneticPage*
+
+### properties :
+
+__REQUIRED__ :
+
+* **pages** PropTypes.arrayOf(PropTypes.Node)
+
+__OPTIONAL__ :
+
+* **pageHeight** *PropTypes.number* (default = 100)
+* **pageWidth** *PropTypes.number* (default = 100)
+* **onPageChangeStart** *PropTypes.func* (default = void)
+* **onPageChangeEnd** *PropTypes.func* (default = void)
+* **easing** *PropTypes.string* (default = linear),
+* **duration** *PropTypes.number* (default = 500)
 
 ## Example App
 It's often the case that you want to test your components out with an example app before publishing.
@@ -34,7 +69,3 @@ Included in this setup is a setup to do just that.
 1. `cd example/app && yarn`
 2.  Within the example/app directory, you will find a setup that you can use to test your app.  Import your components from `components` and use them within the App.js file.
 3. Run `npm run start` and navigate to `http://localhost:3000 to see your app`
-
-## Example usage
-- [Grommet CMS Content Blocks](https://github.com/grommet/grommet-cms-content-blocks)
-- [Grommet Forms](https://github.com/RyanCCollins/grommet-forms)
