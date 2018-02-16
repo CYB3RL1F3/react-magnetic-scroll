@@ -34,7 +34,7 @@ A magic pagination component to navigate with magnetic scroll navigation
   * display magnetic scroll :
 
   ```
-    <MagneticScroll pages={{pages}} {...props} />
+    <MagneticScroll pages={pages} {...props} />
   ```
 
   * scroll to page :

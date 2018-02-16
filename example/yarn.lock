@@ -5393,8 +5393,9 @@ react-error-overlay@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
 
-react-magnetic-scroll@../:
-  version "0.0.1"
+"react-magnetic-scroll@https://github.com/CYB3RL1F3/react-magnetic-scroll.git":
+  version "1.0.0"
+  resolved "https://github.com/CYB3RL1F3/react-magnetic-scroll.git#c20c4234e1f3769fbf1623b467a5bd369e674368"
   dependencies:
     animated-scroll-to "^1.1.8"
     babel-core "^6.0.20"
