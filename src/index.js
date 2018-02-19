@@ -108,10 +108,20 @@ class MagneticScroll extends Component {
   onKeydown = (e) => {
     if (!this.scrolling) {
       switch (e.which) {
-        case 38: this.scrollUp(); // up
+        case 38: {
+          if (this.currentPage > 0) {
+            this.scrolling = true;
+            this.scrollUp(); // up
+          }
           break;
-        case 40: this.scrollDown(); // down
+        }
+        case 40: {
+          if (this.currentPage < this.getNbPages()) {
+            this.scrolling = true;
+            this.scrollDown(); // down
+          }
           break;
+        }
         default: break; // exit this handler for other keys
       }
     }
