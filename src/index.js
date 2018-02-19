@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// import { WindowResizeListener } from 'react-window-resize-listener';
-
 import MagneticPage from './components/magneticPage';
 import style from './styles/magneticScroll.css';
 import Easing from './lib/easing';
@@ -62,6 +60,7 @@ class MagneticScroll extends Component {
     window.addEventListener('touchmove', this.onScroll, { passive: false });
     window.addEventListener('touchstart', this.onTouch, { passive: false });
     window.addEventListener('keydown', this.onKeydown);
+    window.addEventListener('resize', this.onResize);
     this.currentPage = this.getCurrentPage();
     // scroll events
   }
@@ -85,7 +84,7 @@ class MagneticScroll extends Component {
     this.props.onPageChangeEnd();
     setTimeout(() => {
       this.scrolling = false;
-    }, 50);
+    }, 40);
   }
 
   onScroll = (e) => {
@@ -162,10 +161,14 @@ class MagneticScroll extends Component {
   checkAsc = delta => (this.asc > 0 && this.asc < delta) || (this.asc < 0 && this.asc > delta)
 
   resize() {
-    this.setState({
-      pageWidth: vw(this.props.pageWidth),
-      pageHeight: vh(this.props.pageHeight),
-    });
+    if (!this.scrolling) {
+      debounce(() => {
+        this.setState({
+          pageWidth: vw(this.props.pageWidth),
+          pageHeight: vh(this.props.pageHeight),
+        });
+      }, 300);
+    }
   }
 
   scrollTo(page) {

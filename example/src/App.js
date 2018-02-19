@@ -66,6 +66,7 @@ class App extends Component {
           onScrollUpStart={this.scrollUpStart}
           onScrollUpEnd={this.scrollUpEnd}
           onScrollDownEnd={this.scrollDownEnd}
+          onScrollDownStart={this.scrollDownStart}
           easing="easeInOutQuad"
           withRef
           ref={(magneticScroll) => { this.magneticScroll = magneticScroll; }}
