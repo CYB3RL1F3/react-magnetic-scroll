@@ -1,10 +1,10 @@
-let d = false;
+window.dbnc = false;
 const debounce = (func, duration) => {
-  if (d === false) {
-    d = true;
+  if (window.dbnc === false) {
+    window.dbnc = true;
     func();
     setTimeout(() => {
-      d = false;
+      window.dbnc = false;
     }, duration);
   }
 };

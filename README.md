@@ -75,8 +75,33 @@ __OPTIONAL__ :
 * **pageWidth** *PropTypes.number* (default = 100)
 * **onPageChangeStart** *PropTypes.func* (default = void)
 * **onPageChangeEnd** *PropTypes.func* (default = void)
+* **onScrollUp** *PropTypes.func* (default = void)
+* **onScrollDown** *PropTypes.func* (default = void)
 * **easing** *PropTypes.string* (default = linear),
 * **duration** *PropTypes.number* (default = 500)
+* **delay* *PropTypes.number* (default = 0)
+
+__EASING__ :
+
+Values available :
+
+* *linear*
+* *easeInOut*
+* *easeInQuad*
+* *easeOutQuad*
+* *easeInOutQuad*
+* *easeInCubic*
+* *easeOutCubic*
+* *easeInOutCubic*
+* *easeInCirc*
+* *easeOutCirc*
+* *easeInOutCirc*
+* *easeInQuint*
+* *easeOutQuint*
+* *easeInOutQuint*
+* *easeInExpo*
+* *easeOutExpo*
+* *easeInOutExpo*
 
 ## Example App
 It's often the case that you want to test your components out with an example app before publishing.

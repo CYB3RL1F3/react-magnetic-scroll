@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 
 import MagneticPage from './components/magneticPage';
 import style from './styles/magneticScroll.css';
-import Easing from './easing';
-import debounce from './debounce';
+import Easing from './lib/easing';
+import debounce from './lib/debounce';
 
 import { vw, vh } from './utils';
 
@@ -18,9 +18,12 @@ class MagneticScroll extends Component {
     pageWidth: PropTypes.number,
     onPageChangeStart: PropTypes.func,
     onPageChangeEnd: PropTypes.func,
+    onScrollUp: PropTypes.func,
+    onScrollDown: PropTypes.func,
     scrollOptions: PropTypes.shape(),
     easing: PropTypes.string,
     duration: PropTypes.number,
+    delay: PropTypes.number,
   }
 
   static defaultProps = {
@@ -28,9 +31,12 @@ class MagneticScroll extends Component {
     pageWidth: 100,
     onPageChangeStart: () => {},
     onPageChangeEnd: () => {},
+    onScrollUp: () => {},
+    onScrollDown: () => {},
     scrollOptions: {},
     easing: 'linear',
     duration: 500,
+    delay: 0,
   }
 
   constructor(props) {
@@ -76,15 +82,18 @@ class MagneticScroll extends Component {
     this.props.onPageChangeEnd();
     setTimeout(() => {
       this.scrolling = false;
-    }, 500);
+    }, 50);
   }
 
   onScroll = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    debounce(() => {
-      this.scroll(e);
-    }, 300);
+    if (e.type === 'wheel' && this.checkAsc(e.wheelDelta)) {
+      debounce(() => {
+        this.scroll(e);
+      }, 300);
+    }
+    this.asc = e.wheelDelta;
   }
 
   onTouch = (e) => {
@@ -127,6 +136,7 @@ class MagneticScroll extends Component {
   pageHeight = 0;
   pageWidth = 0;
   scrolling = false;
+  asc=0;
 
   options = {
     // duration of the scroll per 1000px, default 500
@@ -134,6 +144,8 @@ class MagneticScroll extends Component {
     delay: 50,
     smooth: 'easeInOutQuint',
   }
+
+  checkAsc = delta => (this.asc > 0 && this.asc < delta) || (this.asc < 0 && this.asc > delta)
 
   resize() {
     this.setState({
@@ -148,6 +160,7 @@ class MagneticScroll extends Component {
   }
 
   scrollUp() {
+    this.props.onScrollUp();
     if (this.currentPage > 0) {
       this.currentPage -= 1;
       this.scrollToCurrentPage();
@@ -155,6 +168,7 @@ class MagneticScroll extends Component {
   }
 
   scrollDown() {
+    this.props.onScrollDown();
     if (this.currentPage < this.getNbPages()) {
       this.currentPage += 1;
       this.scrollToCurrentPage();
@@ -172,7 +186,7 @@ class MagneticScroll extends Component {
   animateScrollTo = (position, duration) => {
     const start = window.pageYOffset;
     const change = position - start;
-    const increment = 20;
+    const increment = 10;
     let currentTime = 0;
 
     const animateScroll = () => {
@@ -187,17 +201,18 @@ class MagneticScroll extends Component {
         this.onPageChangeEnd();
       }
     };
-    animateScroll();
+    setTimeout(animateScroll, this.props.delay);
   }
 
   scroll(e) {
+    const threshold = 1;
     if (!this.scrolling) {
       this.scrolling = true;
       if (e.type === 'wheel' && e.wheelDelta) {
         const wd = e.wheelDelta;
-        if (wd > 0 && this.currentPage > 0) {
+        if (wd > threshold && this.currentPage > 0) {
           this.scrollUp();
-        } else if (wd < 0 && this.currentPage < this.getNbPages() - 1) {
+        } else if (wd < -threshold && this.currentPage < this.getNbPages() - 1) {
           this.scrollDown();
         } else {
           this.scrolling = false;
