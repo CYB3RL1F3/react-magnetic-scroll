@@ -18,8 +18,10 @@ class MagneticScroll extends Component {
     pageWidth: PropTypes.number,
     onPageChangeStart: PropTypes.func,
     onPageChangeEnd: PropTypes.func,
-    onScrollUp: PropTypes.func,
-    onScrollDown: PropTypes.func,
+    onScrollUpStart: PropTypes.func,
+    onScrollUpEnd: PropTypes.func,
+    onScrollDownStart: PropTypes.func,
+    onScrollDownEnd: PropTypes.func,
     scrollOptions: PropTypes.shape(),
     easing: PropTypes.string,
     duration: PropTypes.number,
@@ -31,8 +33,10 @@ class MagneticScroll extends Component {
     pageWidth: 100,
     onPageChangeStart: () => {},
     onPageChangeEnd: () => {},
-    onScrollUp: () => {},
-    onScrollDown: () => {},
+    onScrollUpStart: () => {},
+    onScrollUpEnd: () => {},
+    onScrollDownStart: () => {},
+    onScrollDownEnd: () => {},
     scrollOptions: {},
     easing: 'linear',
     duration: 500,
@@ -137,6 +141,7 @@ class MagneticScroll extends Component {
   pageWidth = 0;
   scrolling = false;
   asc=0;
+  dir=null;
 
   options = {
     // duration of the scroll per 1000px, default 500
@@ -160,7 +165,8 @@ class MagneticScroll extends Component {
   }
 
   scrollUp() {
-    this.props.onScrollUp();
+    this.props.onScrollUpStart();
+    this.dir = 'up';
     if (this.currentPage > 0) {
       this.currentPage -= 1;
       this.scrollToCurrentPage();
@@ -168,7 +174,8 @@ class MagneticScroll extends Component {
   }
 
   scrollDown() {
-    this.props.onScrollDown();
+    this.props.onScrollDownStart();
+    this.dir = 'down';
     if (this.currentPage < this.getNbPages()) {
       this.currentPage += 1;
       this.scrollToCurrentPage();
@@ -198,6 +205,11 @@ class MagneticScroll extends Component {
       if (currentTime < duration) {
         setTimeout(animateScroll, increment);
       } else {
+        if (this.dir === 'up') {
+          this.props.onScrollUpEnd();
+        } else {
+          this.props.onScrollDownEnd();
+        }
         this.onPageChangeEnd();
       }
     };

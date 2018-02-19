@@ -12,18 +12,26 @@ class App extends Component {
     console.log('PAGE START');
   }
 
-  scrollUp = () => {
-    console.log('SCROLL UP');
+  scrollUpStart = () => {
+    console.log('SCROLL UP START');
   }
 
-  scrollDown = () => {
-    console.log('SCROLL DOWN');
+  scrollUpEnd = () => {
+    console.log('SCROLL UP END');
+  }
+
+  scrollDownStart = () => {
+    console.log('SCROLL DOWN START');
+  }
+
+  scrollDownEnd = () => {
+    console.log('SCROLL DOWN END');
   }
 
   navigateToPage = (e) => {
     e.preventDefault();
     console.log(this.magneticScroll);
-    this.magneticScroll.scrollTo(4);
+    this.magneticScroll.scrollTo(3);
   }
 
 
@@ -55,8 +63,9 @@ class App extends Component {
           pages={this.renderPages()}
           onPageChangeEnd={this.pageEnd}
           onPageChangeStart={this.pageStart}
-          onScrollUp={this.scrollUp}
-          onScrollDown={this.scrollDown}
+          onScrollUpStart={this.scrollUpStart}
+          onScrollUpEnd={this.scrollUpEnd}
+          onScrollDownEnd={this.scrollDownEnd}
           easing="easeInOutQuad"
           withRef
           ref={(magneticScroll) => { this.magneticScroll = magneticScroll; }}

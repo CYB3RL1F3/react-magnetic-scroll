@@ -40,11 +40,13 @@ A magic pagination component to navigate with magnetic scroll navigation
   * scroll to page :
 
     * add 'ref' property
+    * add 'withRef' property
     * call scrollTo with the n° of page as argument
 
   ```
     <MagneticScroll
       ref={magneticScroll => { this.magneticScroll = magneticScroll; }}
+      withRef
       pages={{pages}}
       {...props}
     />
@@ -75,8 +77,10 @@ __OPTIONAL__ :
 * **pageWidth** *PropTypes.number* (default = 100)
 * **onPageChangeStart** *PropTypes.func* (default = void)
 * **onPageChangeEnd** *PropTypes.func* (default = void)
-* **onScrollUp** *PropTypes.func* (default = void)
-* **onScrollDown** *PropTypes.func* (default = void)
+* **onScrollUpStart** *PropTypes.func* (default = void)
+* **onScrollUpEnd** *PropTypes.func* (default = void)
+* **onScrollDownStart** *PropTypes.func* (default = void)
+* **onScrollDownEnd** *PropTypes.func* (default = void)
 * **easing** *PropTypes.string* (default = linear),
 * **duration** *PropTypes.number* (default = 500)
 * **delay* *PropTypes.number* (default = 0)
