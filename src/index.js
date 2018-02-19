@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import MagneticPage from './components/magneticPage';
 import style from './styles/magneticScroll.css';
-import Easing from './lib/easing';
+import Scroll from './lib/scroll';
 import debounce from './lib/debounce';
 
 import { vw, vh } from './utils';
@@ -47,7 +47,7 @@ class MagneticScroll extends Component {
       pageHeight: vh(this.props.pageHeight),
     };
     this.options = { ...this.options, ...this.props.scrollOptions };
-    this.easing = new Easing();
+    this.animateScroll = new Scroll();
   }
 
   componentWillMount() {
@@ -127,6 +127,15 @@ class MagneticScroll extends Component {
 
   onResize = e => this.resize(e)
 
+  onScrollFinished = () => {
+    if (this.dir === 'up') {
+      this.props.onScrollUpEnd();
+    } else {
+      this.props.onScrollDownEnd();
+    }
+    this.onPageChangeEnd();
+  }
+
   getCurrentPage = () => Math.ceil(window.pageYOffset / this.getTotalHeight());
 
   getTotalHeight = () =>
@@ -197,12 +206,23 @@ class MagneticScroll extends Component {
   scrollToCurrentPage() {
     const position = this.getScrollPosition(this.currentPage);
     this.onPageChangeStart();
-    const { duration } = this.props;
-    this.animateScrollTo(position, duration);
+    this.animateScrollTo(position);
     // Scroll.animateScroll.scrollTo(position, this.options);
   }
 
-  animateScrollTo = (position, duration) => {
+  animateScrollTo = (position) => {
+    const { duration, delay, easing } = this.props;
+    this.animateScroll.to({
+      position,
+      duration,
+      delay,
+      easing,
+      callback: this.onScrollFinished,
+    });
+  }
+  /*
+  animateScrollTo = (position) => {
+    const { duration } = this.props;
     const start = window.pageYOffset;
     const change = position - start;
     const increment = 10;
@@ -226,7 +246,7 @@ class MagneticScroll extends Component {
       }
     };
     setTimeout(animateScroll, this.props.delay);
-  }
+  } */
 
   scroll(e) {
     const threshold = 1;
