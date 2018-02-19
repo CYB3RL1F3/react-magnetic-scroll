@@ -10,7 +10,6 @@
     "prepublish": "rimraf dist && npm run build"
   },
   "dependencies": {
-    "animated-scroll-to": "^1.1.8",
     "babel-core": "^6.0.20",
     "babel-eslint": "^7.1.0",
     "babel-loader": "^6.2.10",
@@ -26,8 +25,6 @@
     "prop-types": "^15.6.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-scroll": "^1.7.6",
-    "react-window-resize-listener": "^1.1.0",
     "rimraf": "^2.5.4",
     "style-loader": "^0.20.1",
     "webpack": "^2.2.0"

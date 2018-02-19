@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// import animateScrollTo from 'animated-scroll-to';
 // import { WindowResizeListener } from 'react-window-resize-listener';
 
 import MagneticPage from './components/magneticPage';
