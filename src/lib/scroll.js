@@ -9,7 +9,6 @@ class Scroll {
     this.delay = 0;
     this.callback = () => {};
     this.transitionner = new Easing();
-    console.log(this.easing);
   }
 
   to({ position, duration, delay, easing, callback }) {
@@ -40,7 +39,9 @@ class Scroll {
         this.animate();
       }, this.increment);
     } else {
-      this.callback();
+      setTimeout(() => {
+        this.callback();
+      }, 65);
     }
   }
 
