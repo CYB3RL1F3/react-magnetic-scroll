@@ -124,6 +124,8 @@ class MagneticScroll extends Component {
         }
         default: break; // exit this handler for other keys
       }
+    } else if (e.which === 38 || e.which === 40) {
+      e.preventDefault();
     }
   }
 
