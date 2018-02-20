@@ -107,6 +107,7 @@ class MagneticScroll extends Component {
     if (!this.scrolling) {
       switch (e.which) {
         case 38: {
+          e.preventDefault();
           if (this.currentPage > 0) {
             this.scrolling = true;
             this.scrollUp(); // up
@@ -114,6 +115,7 @@ class MagneticScroll extends Component {
           break;
         }
         case 40: {
+          e.preventDefault();
           if (this.currentPage < this.getNbPages()) {
             this.scrolling = true;
             this.scrollDown(); // down
