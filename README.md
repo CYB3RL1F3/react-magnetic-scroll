@@ -3,6 +3,12 @@
 
 A magic pagination component to navigate with magnetic scroll navigation
 
+## Breaking changes
+
+### From v1.2 to v1.3 :
+
+* Now import *MagneticScroll* using braces { }
+* Default import still available but deprecated and soon unavailable.
 
 ## Using the component :
 1. Install the component :
@@ -11,25 +17,38 @@ A magic pagination component to navigate with magnetic scroll navigation
 
 2. Import the component that way :
 
- ```import MagneticScroll from 'react-magnetic-scroll';```
+ ```import { MagneticScroll, MagneticPage } from 'react-magnetic-scroll';```
 
 3. Call the component by injecting options :
 
-  * define pages :
+  * define pages : use the MagneticPage component
 
   ```
   const page1 = (
-    <div id="page1"><p>page 1</p></div>
+    <MagneticPage id="page1">
+      <div id="panda">
+        <p>page 1</p>
+      </div>
+    </MagneticPage>
   );
   const page2 = (
-    <div id="page2"><p>page 2</p></div>
+    <MagneticPage id="page2">
+      <div id="flying_fish">
+        <p>page 2</p>
+      </div>
+    </MagneticPage>
   );
   const page3 = (
-    <div id="page3"><p>page 3</p></div>
+    <MagneticPage id="page2">
+      <div id="birthdaycake">
+        <p>page 3</p>
+      </div>
+    </MagneticPage>
   );
 
   const pages = [page1, page2, page3];
   ```
+  Please note *id* property is __required__
 
   * display magnetic scroll :
 
@@ -59,11 +78,11 @@ A magic pagination component to navigate with magnetic scroll navigation
 
 ### how it works
 
-__MagneticScroll__ uses an array of components, views, etc... and display them in "pages" that have similar width & height. On *scroll*, *keydown* & *touchmove* events, the natural scroll is blocked and the magnetic container autoscroll to the next page.
+__MagneticScroll__ uses an array of components, views, etc... and display them in "magnetic pages" that have similar width & height. On *scroll*, *keydown* & *touchmove* events, the natural scroll is blocked and the magnetic container autoscroll to the next page.
 
 Values are expressed in viewheights (vh) and viewwidths (vw).
 
-You don't need to wrap your pages. Pages are auto-wrapped by a component *MagneticPage*
+You need to wrap your pages with a component *MagneticPage* that requires an ID and can handle hooks before and after scroll.
 
 ### properties :
 
@@ -83,7 +102,8 @@ __OPTIONAL__ :
 * **onScrollDownEnd** *PropTypes.func* (default = void)
 * **easing** *PropTypes.string* (default = linear),
 * **duration** *PropTypes.number* (default = 500)
-* **delay* *PropTypes.number* (default = 0)
+* **delay** *PropTypes.number* (default = 0)
+* **disabled** *PropTypes.bool (default = false)
 
 __EASING__ :
 
@@ -106,6 +126,19 @@ Values available :
 * *easeInExpo*
 * *easeOutExpo*
 * *easeInOutExpo*
+
+__MagneticPage properties__ :
+
+* **ID** : *PropTypes.string.isRequired*
+* **onScrollUpStart** : *PropTypes.func* (default: void)
+* **onScrollUpEnd** : *PropTypes.func* (default: void)
+* **onScrollDownStart** : *PropTypes.func* (default: void)
+* **onScrollDownEnd** : *PropTypes.func* (default: void)
+
+__When are hooks triggered ?__
+
+* *start* : on scroll from the current page
+* *end* : on arriving on the current page (from the previous one)
 
 ## Example App
 It's often the case that you want to test your components out with an example app before publishing.
