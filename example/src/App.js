@@ -12,20 +12,20 @@ class App extends Component {
     console.log('PAGE START');
   }
 
-  scrollUpStart = () => {
-    console.log('SCROLL UP START');
+  scrollUpStart = (i = '') => {
+    console.log(`SCROLL UP START ${i}`);
   }
 
-  scrollUpEnd = () => {
-    console.log('SCROLL UP END');
+  scrollUpEnd = (i = '') => {
+    console.log(`SCROLL UP END ${i}`);
   }
 
-  scrollDownStart = () => {
-    console.log('SCROLL DOWN START');
+  scrollDownStart = (i = '') => {
+    console.log(`SCROLL DOWN START ${i}`);
   }
 
-  scrollDownEnd = () => {
-    console.log('SCROLL DOWN END');
+  scrollDownEnd = (i = '') => {
+    console.log(`SCROLL DOWN END ${i}`);
   }
 
   navigateToPage = (e) => {
@@ -41,7 +41,11 @@ class App extends Component {
     for (let i = 0; i < n; i++) {
       const page = (
         <MagneticPage
-          key={`page__${i}`}
+          id={`page__${i}`}
+          onScrollUpStart={() => { this.scrollUpStart(i); }}
+          onScrollUpEnd={() => { this.scrollUpEnd(i); }}
+          onScrollDownStart={() => { this.scrollDownStart(i); }}
+          onScrollDownEnd={() => { this.scrollDownEnd(i); }}
         >
           <div className="App-header">
             <img src={logo} className="App-logo" alt="logo" />

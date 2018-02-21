@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import MagneticPage from './magneticPage';
 import style from '../styles/magneticScroll.css';
 import Scroll from '../lib/scroll';
 import debounce from '../lib/debounce';
@@ -23,6 +22,7 @@ class MagneticScroll extends Component {
     easing: PropTypes.string,
     duration: PropTypes.number,
     delay: PropTypes.number,
+    disabled: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -38,6 +38,7 @@ class MagneticScroll extends Component {
     easing: 'linear',
     duration: 500,
     delay: 0,
+    disabled: false,
   }
 
   constructor(props) {
@@ -61,7 +62,7 @@ class MagneticScroll extends Component {
     window.addEventListener('touchstart', this.onTouch, { passive: false });
     window.addEventListener('keydown', this.onKeydown);
     window.addEventListener('resize', this.onResize);
-    this.currentPage = this.getCurrentPage();
+    this.currentPageIndex = this.getCurrentPageIndex();
     // scroll events
   }
 
@@ -78,6 +79,11 @@ class MagneticScroll extends Component {
 
   onPageChangeStart = () => {
     this.props.onPageChangeStart();
+    if (this.dir === 'up') {
+      this.onScrollUpStart();
+    } else {
+      this.onScrollDownStart();
+    }
   }
 
   onPageChangeEnd = () => {
@@ -104,11 +110,11 @@ class MagneticScroll extends Component {
   }
 
   onKeydown = (e) => {
-    if (!this.scrolling) {
+    if (!this.scrolling && !this.props.disabled) {
       switch (e.which) {
         case 38: {
           e.preventDefault();
-          if (this.currentPage > 0) {
+          if (this.currentPageIndex > 0) {
             this.scrolling = true;
             this.scrollUp(); // up
           }
@@ -116,7 +122,7 @@ class MagneticScroll extends Component {
         }
         case 40: {
           e.preventDefault();
-          if (this.currentPage < this.getNbPages()) {
+          if (this.currentPageIndex < this.getNbPages()) {
             this.scrolling = true;
             this.scrollDown(); // down
           }
@@ -133,14 +139,38 @@ class MagneticScroll extends Component {
 
   onScrollFinished = () => {
     if (this.dir === 'up') {
-      this.props.onScrollUpEnd();
+      this.onScrollUpEnd();
     } else {
-      this.props.onScrollDownEnd();
+      this.onScrollDownEnd();
     }
     this.onPageChangeEnd();
   }
 
-  getCurrentPage = () => Math.ceil(window.pageYOffset / this.getTotalHeight());
+  onScrollUpStart = () => {
+    this.props.onScrollUpStart();
+    console.log(this.getCurrentPage());
+    this.getCurrentPage().props.onScrollUpStart();
+  }
+
+  onScrollDownStart = () => {
+    this.props.onScrollDownStart();
+    console.log(this.getCurrentPage());
+    this.getCurrentPage().props.onScrollDownStart();
+  }
+
+  onScrollUpEnd = () => {
+    this.props.onScrollUpEnd();
+    this.getCurrentPage().props.onScrollUpEnd();
+  }
+
+  onScrollDownEnd = () => {
+    this.props.onScrollDownEnd();
+    this.getCurrentPage().props.onScrollDownEnd();
+  }
+
+  getCurrentPage = () => this.props.pages[this.getCurrentPageIndex()]
+
+  getCurrentPageIndex = () => Math.ceil(window.pageYOffset / this.getTotalHeight());
 
   getTotalHeight = () =>
     this.props.pageHeight * this.getNbPages();
@@ -155,7 +185,7 @@ class MagneticScroll extends Component {
     return this.getNbPages() * this.state.pageHeight;
   }
 
-  currentPage = 0;
+  currentPageIndex = 0;
   ts = null;
   animating = false;
   pageHeight = 0;
@@ -185,15 +215,15 @@ class MagneticScroll extends Component {
   }
 
   scrollTo(page) {
-    this.currentPage = page;
+    this.currentPageIndex = page;
     this.scrollToCurrentPage();
   }
 
   scrollUp() {
     this.props.onScrollUpStart();
     this.dir = 'up';
-    if (this.currentPage > 0) {
-      this.currentPage -= 1;
+    if (this.currentPageIndex > 0) {
+      this.currentPageIndex -= 1;
       this.scrollToCurrentPage();
     }
   }
@@ -201,14 +231,14 @@ class MagneticScroll extends Component {
   scrollDown() {
     this.props.onScrollDownStart();
     this.dir = 'down';
-    if (this.currentPage < this.getNbPages()) {
-      this.currentPage += 1;
+    if (this.currentPageIndex < this.getNbPages()) {
+      this.currentPageIndex += 1;
       this.scrollToCurrentPage();
     }
   }
 
   scrollToCurrentPage() {
-    const position = this.getScrollPosition(this.currentPage);
+    const position = this.getScrollPosition(this.currentPageIndex);
     this.onPageChangeStart();
     this.animateScrollTo(position);
     // Scroll.animateScroll.scrollTo(position, this.options);
@@ -224,52 +254,25 @@ class MagneticScroll extends Component {
       callback: this.onScrollFinished,
     });
   }
-  /*
-  animateScrollTo = (position) => {
-    const { duration } = this.props;
-    const start = window.pageYOffset;
-    const change = position - start;
-    const increment = 10;
-    let currentTime = 0;
-
-    const animateScroll = () => {
-      currentTime += increment;
-      const { easing } = this.props;
-      // const val = this.easeInOutQuad(currentTime, start, change, duration);
-      const val = this.easing.ease(easing, currentTime, start, change, duration);
-      window.scrollTo(0, val);
-      if (currentTime < duration) {
-        setTimeout(animateScroll, increment);
-      } else {
-        if (this.dir === 'up') {
-          this.props.onScrollUpEnd();
-        } else {
-          this.props.onScrollDownEnd();
-        }
-        this.onPageChangeEnd();
-      }
-    };
-    setTimeout(animateScroll, this.props.delay);
-  } */
 
   scroll(e) {
     const threshold = 1;
-    if (!this.scrolling) {
+    if (!this.scrolling && !this.props.disabled) {
       this.scrolling = true;
       if (e.type === 'wheel' && e.wheelDelta) {
         const wd = e.wheelDelta;
-        if (wd > threshold && this.currentPage > 0) {
+        if (wd > threshold && this.currentPageIndex > 0) {
           this.scrollUp();
-        } else if (wd < -threshold && this.currentPage < this.getNbPages() - 1) {
+        } else if (wd < -threshold && this.currentPageIndex < this.getNbPages() - 1) {
           this.scrollDown();
         } else {
           this.scrolling = false;
         }
       } else if (e.type === 'touchmove' && e.changedTouches) {
         const te = e.changedTouches[0].clientY;
-        if (this.ts > te && this.currentPage < this.getNbPages() - 1) {
+        if (this.ts > te && this.currentPageIndex < this.getNbPages() - 1) {
           this.scrollDown();
-        } else if (this.ts < te && this.currentPage > 0) {
+        } else if (this.ts < te && this.currentPageIndex > 0) {
           this.scrollUp();
         } else {
           this.scrolling = false;
@@ -287,14 +290,14 @@ class MagneticScroll extends Component {
     };
     const pageStyle = {
       width: this.state.pageWidth,
-      height: this.state.pageHeight
+      height: this.state.pageHeight,
     };
     return (
       <div className={style.panda} style={panda}>
         <div className={style.magnetic}>
-          {this.props.pages.map((page, index) => (
+          {this.props.pages.map(page => (
             <div
-              key={`_magneticPage${index}`}
+              key={`_magneticPage${page.props.id}`}
               style={pageStyle}
               className={style.page}
             >
