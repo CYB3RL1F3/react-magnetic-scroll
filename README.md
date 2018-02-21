@@ -138,8 +138,8 @@ __MagneticPage properties__ :
 
 __When are hooks triggered ?__
 
-* *start* : on scroll from the current page
-* *end* : on arriving on the current page (from the previous one)
+* __start__ : on scroll from the current page
+* __end__ : on arriving on the current page (from the previous one)
 
 ## Example App
 It's often the case that you want to test your components out with an example app before publishing.
@@ -154,10 +154,13 @@ Included in this setup is a setup to do just that.
 
 ## Dev roadmap :
 
-### Coming soon v1.3.1 :
+### Coming soon v1.4 :
 
 * Possibility to set up custom easing transitions functions
+* Add more easing transitions functions (bounce, etc...)
+* Add horizontal scrolling & pagination (hot !!)
 * Add controls and exceptions for bad entries
+* Set up pre-commit hooks
 
 ### Later...
 
