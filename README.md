@@ -150,3 +150,15 @@ Included in this setup is a setup to do just that.
 1. `cd example/app && yarn`
 2.  Within the example/app directory, you will find a setup that you can use to test your app.  Import your components from `components` and use them within the App.js file.
 3. Run `npm run start` and navigate to `http://localhost:3000 to see your app`
+
+
+## Dev roadmap :
+
+### Coming soon v1.3.1 :
+
+* Possibility to set up custom easing transitions functions
+* Add controls and exceptions for bad entries
+
+### Later...
+
+* Writing unit tests :)
