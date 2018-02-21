@@ -2,6 +2,7 @@
 # react-magnetic-scroll
 
 A magic pagination component to navigate with magnetic scroll navigation
+current version : 1.3.0
 
 ## Breaking changes
 

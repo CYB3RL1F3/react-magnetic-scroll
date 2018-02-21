@@ -148,13 +148,11 @@ class MagneticScroll extends Component {
 
   onScrollUpStart = () => {
     this.props.onScrollUpStart();
-    console.log(this.getCurrentPage());
     this.getCurrentPage().props.onScrollUpStart();
   }
 
   onScrollDownStart = () => {
     this.props.onScrollDownStart();
-    console.log(this.getCurrentPage());
     this.getCurrentPage().props.onScrollDownStart();
   }
 
