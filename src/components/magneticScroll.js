@@ -63,6 +63,7 @@ class MagneticScroll extends Component {
     window.addEventListener('keydown', this.onKeydown);
     window.addEventListener('resize', this.onResize);
     this.currentPageIndex = this.getCurrentPageIndex();
+    console.log(this.currentPageIndex);
     // scroll events
   }
 
@@ -79,11 +80,6 @@ class MagneticScroll extends Component {
 
   onPageChangeStart = () => {
     this.props.onPageChangeStart();
-    if (this.dir === 'up') {
-      this.onScrollUpStart();
-    } else {
-      this.onScrollDownStart();
-    }
   }
 
   onPageChangeEnd = () => {
@@ -137,6 +133,15 @@ class MagneticScroll extends Component {
 
   onResize = e => this.resize(e)
 
+  onScrollStart = () => {
+    if (this.dir === 'up') {
+      this.onScrollUpStart();
+    } else {
+      this.onScrollDownStart();
+    }
+    this.onPageChangeStart();
+  }
+
   onScrollFinished = () => {
     if (this.dir === 'up') {
       this.onScrollUpEnd();
@@ -166,7 +171,7 @@ class MagneticScroll extends Component {
     this.getCurrentPage().props.onScrollDownEnd();
   }
 
-  getCurrentPage = () => this.props.pages[this.getCurrentPageIndex()]
+  getCurrentPage = () => this.props.pages[this.currentPageIndex]
 
   getCurrentPageIndex = () => Math.ceil(window.pageYOffset / this.getTotalHeight());
 
@@ -218,8 +223,8 @@ class MagneticScroll extends Component {
   }
 
   scrollUp() {
-    this.props.onScrollUpStart();
     this.dir = 'up';
+    this.onScrollStart();
     if (this.currentPageIndex > 0) {
       this.currentPageIndex -= 1;
       this.scrollToCurrentPage();
@@ -227,8 +232,8 @@ class MagneticScroll extends Component {
   }
 
   scrollDown() {
-    this.props.onScrollDownStart();
     this.dir = 'down';
+    this.onScrollStart();
     if (this.currentPageIndex < this.getNbPages()) {
       this.currentPageIndex += 1;
       this.scrollToCurrentPage();
@@ -237,7 +242,6 @@ class MagneticScroll extends Component {
 
   scrollToCurrentPage() {
     const position = this.getScrollPosition(this.currentPageIndex);
-    this.onPageChangeStart();
     this.animateScrollTo(position);
     // Scroll.animateScroll.scrollTo(position, this.options);
   }

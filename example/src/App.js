@@ -13,19 +13,23 @@ class App extends Component {
   }
 
   scrollUpStart = (i = '') => {
-    console.log(`SCROLL UP START ${i}`);
+    let j = i === '' ? '' : (i + 1);
+    console.log(`SCROLL UP START ${j}`);
   }
 
   scrollUpEnd = (i = '') => {
-    console.log(`SCROLL UP END ${i}`);
+    let j = i === '' ? '' : (i + 1);
+    console.log(`SCROLL UP END ${j}`);
   }
 
   scrollDownStart = (i = '') => {
-    console.log(`SCROLL DOWN START ${i}`);
+    let j = i === '' ? '' : (i + 1);
+    console.log(`SCROLL DOWN START ${j}`);
   }
 
   scrollDownEnd = (i = '') => {
-    console.log(`SCROLL DOWN END ${i}`);
+    let j = i === '' ? '' : (i + 1);
+    console.log(`SCROLL DOWN END ${j}`);
   }
 
   navigateToPage = (e) => {
