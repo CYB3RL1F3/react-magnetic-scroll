@@ -63,7 +63,6 @@ class MagneticScroll extends Component {
     window.addEventListener('keydown', this.onKeydown);
     window.addEventListener('resize', this.onResize);
     this.currentPageIndex = this.getCurrentPageIndex();
-    console.log(this.currentPageIndex);
     // scroll events
   }
 
@@ -92,7 +91,8 @@ class MagneticScroll extends Component {
   onScroll = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === 'wheel' && this.checkAsc(e.wheelDelta)) {
+    const delta = e.wheelDelta || -e.deltaY;
+    if (e.type === 'wheel' && this.checkAsc(delta)) {
       debounce(() => {
         this.scroll(e);
       }, 300);
@@ -101,7 +101,7 @@ class MagneticScroll extends Component {
         this.scroll(e);
       }, 200);
     }
-    this.asc = e.wheelDelta;
+    this.asc = delta;
   }
 
   onTouch = (e) => {
@@ -265,8 +265,8 @@ class MagneticScroll extends Component {
     const threshold = 1;
     if (!this.scrolling && !this.props.disabled) {
       this.scrolling = true;
-      if (e.type === 'wheel' && e.wheelDelta) {
-        const wd = e.wheelDelta;
+      if (e.type === 'wheel' && (e.wheelDelta|| e.deltaY)) {
+        const wd = e.wheelDelta || -e.deltaY;
         if (wd > threshold && this.currentPageIndex > 0) {
           this.scrollUp();
         } else if (wd < -threshold && this.currentPageIndex < this.getNbPages() - 1) {
