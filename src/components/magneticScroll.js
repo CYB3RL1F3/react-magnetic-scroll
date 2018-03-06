@@ -96,6 +96,10 @@ class MagneticScroll extends Component {
       debounce(() => {
         this.scroll(e);
       }, 300);
+    } else if (e.type === 'touchmove') {
+      debounce(() => {
+        this.scroll(e);
+      }, 200);
     }
     this.asc = e.wheelDelta;
   }
