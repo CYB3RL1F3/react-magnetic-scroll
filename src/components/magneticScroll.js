@@ -5,7 +5,7 @@ import style from '../styles/magneticScroll.css';
 import Scroll from '../lib/scroll';
 import debounce from '../lib/debounce';
 
-import { vw, vh } from '../utils';
+import { vw, vh, isMobile } from '../utils';
 
 class MagneticScroll extends Component {
   static propTypes = {
@@ -61,7 +61,7 @@ class MagneticScroll extends Component {
     window.addEventListener('touchmove', this.onScroll, { passive: false });
     window.addEventListener('touchstart', this.onTouch, { passive: false });
     window.addEventListener('keydown', this.onKeydown);
-    window.addEventListener('resize', this.onResize);
+    if (!isMobile()) window.addEventListener('resize', this.onResize);
     this.currentPageIndex = this.getCurrentPageIndex();
     // scroll events
   }
@@ -218,7 +218,6 @@ class MagneticScroll extends Component {
             pageWidth: vw(this.props.pageWidth),
             pageHeight: vh(this.props.pageHeight),
           });
-          console.log(this.state.pageWidth, this.state.pageHeight);
         }, 200);
       }, 100);
     }
