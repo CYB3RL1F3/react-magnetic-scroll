@@ -213,11 +213,14 @@ class MagneticScroll extends Component {
   resize() {
     if (!this.scrolling) {
       debounce(() => {
-        this.setState({
-          pageWidth: vw(this.props.pageWidth),
-          pageHeight: vh(this.props.pageHeight),
-        });
-      }, 300);
+        setTimeout(() => {
+          this.setState({
+            pageWidth: vw(this.props.pageWidth),
+            pageHeight: vh(this.props.pageHeight),
+          });
+          console.log(this.state.pageWidth, this.state.pageHeight);
+        }, 200);
+      }, 100);
     }
   }
 
