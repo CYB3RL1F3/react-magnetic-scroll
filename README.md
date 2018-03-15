@@ -105,6 +105,9 @@ __OPTIONAL__ :
 * **duration** *PropTypes.number* (default = 500)
 * **delay** *PropTypes.number* (default = 0)
 * **disabled** *PropTypes.bool (default = false)
+* **debounce** *PropTypes.number (default = 600)
+* **style** *PropTypes.shape (default = {})
+* **pageStyle** *PropTypes.bool (default = {})
 
 __EASING__ :
 

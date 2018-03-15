@@ -24,6 +24,8 @@ class MagneticScroll extends Component {
     delay: PropTypes.number,
     disabled: PropTypes.bool,
     debounce: PropTypes.number,
+    style: PropTypes.shape(),
+    pageStyle: PropTypes.shape(),
   }
 
   static defaultProps = {
@@ -41,6 +43,8 @@ class MagneticScroll extends Component {
     delay: 0,
     disabled: false,
     debounce: 600,
+    style: {},
+    pageStyle: {},
   }
 
   constructor(props) {
@@ -297,10 +301,12 @@ class MagneticScroll extends Component {
     const panda = {
       width: this.state.pageWidth,
       height: this.getHeight(),
+      ...this.props.style,
     };
     const pageStyle = {
       width: this.state.pageWidth,
       height: this.state.pageHeight,
+      ...this.props.pageStyle,
     };
     return (
       <div className={style.panda} style={panda}>
