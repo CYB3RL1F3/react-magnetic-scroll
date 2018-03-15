@@ -23,6 +23,7 @@ class MagneticScroll extends Component {
     duration: PropTypes.number,
     delay: PropTypes.number,
     disabled: PropTypes.bool,
+    debounce: PropTypes.number,
   }
 
   static defaultProps = {
@@ -39,6 +40,7 @@ class MagneticScroll extends Component {
     duration: 500,
     delay: 0,
     disabled: false,
+    debounce: 600,
   }
 
   constructor(props) {
@@ -95,11 +97,11 @@ class MagneticScroll extends Component {
     if (e.type === 'wheel' && this.checkAsc(delta)) {
       debounce(() => {
         this.scroll(e);
-      }, 300);
+      }, this.props.debounce);
     } else if (e.type === 'touchmove') {
       debounce(() => {
         this.scroll(e);
-      }, 200);
+      }, this.props.debounce);
     }
     this.asc = delta;
   }
