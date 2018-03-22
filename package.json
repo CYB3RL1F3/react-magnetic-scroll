@@ -1,6 +1,6 @@
 {
   "name": "react-magnetic-scroll",
-  "version": "1.3.8",
+  "version": "1.3.9",
   "description": "react magnetic scroll component",
   "main": "dist/index.js",
   "license": "APACHE",

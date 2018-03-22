@@ -20,7 +20,7 @@ class Scroll {
     this.start = window.pageYOffset;
     this.change = position - this.start;
     setTimeout(() => {
-      this.animate();
+      window.requestAnimationFrame(this.animate.bind(this));
     }, delay);
   }
 
@@ -36,9 +36,11 @@ class Scroll {
     );
     window.scrollTo(0, val);
     if (this.currentTime < this.duration) {
+      /*
       setTimeout(() => {
         this.animate();
-      }, this.increment);
+      }, this.increment); */
+      window.requestAnimationFrame(this.animate.bind(this));
     } else {
       setTimeout(() => {
         this.callback();
