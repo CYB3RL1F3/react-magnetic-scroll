@@ -103,6 +103,7 @@ __OPTIONAL__ :
 * **onScrollDownEnd** *PropTypes.func* (default = void)
 * **easing** *PropTypes.string* (default = linear),
 * **duration** *PropTypes.number* (default = 500)
+* **increment** *PropTypes.number* (default = 10)
 * **delay** *PropTypes.number* (default = 0)
 * **disabled** *PropTypes.bool (default = false)
 * **debounce** *PropTypes.number (default = 600)

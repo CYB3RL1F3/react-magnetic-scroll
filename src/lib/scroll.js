@@ -11,13 +11,14 @@ class Scroll {
     this.transitionner = new Easing();
   }
 
-  to({ position, duration, delay, easing, callback }) {
+  to({ position, duration, delay, easing, increment, callback }) {
     this.currentTime = 0;
-    this.start = window.pageYOffset;
-    this.change = position - this.start;
+    this.increment = increment;
     this.easing = easing;
     this.duration = duration;
     this.callback = callback;
+    this.start = window.pageYOffset;
+    this.change = position - this.start;
     setTimeout(() => {
       this.animate();
     }, delay);

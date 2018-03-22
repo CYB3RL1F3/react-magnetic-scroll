@@ -26,6 +26,7 @@ class MagneticScroll extends Component {
     debounce: PropTypes.number,
     style: PropTypes.shape(),
     pageStyle: PropTypes.shape(),
+    increment: PropTypes.number,
   }
 
   static defaultProps = {
@@ -45,6 +46,7 @@ class MagneticScroll extends Component {
     debounce: 600,
     style: {},
     pageStyle: {},
+    increment: 10,
   }
 
   constructor(props) {
@@ -259,12 +261,13 @@ class MagneticScroll extends Component {
   }
 
   animateScrollTo = (position) => {
-    const { duration, delay, easing } = this.props;
+    const { duration, delay, easing, increment } = this.props;
     this.animateScroll.to({
       position,
       duration,
       delay,
       easing,
+      increment,
       callback: this.onScrollFinished,
     });
   }
