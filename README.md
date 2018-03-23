@@ -6,6 +6,11 @@ current version : 1.3.0
 
 ## Breaking changes
 
+### From v1.3 to v1.4 :
+
+* Scroll is more optimal & smooth. Check out duration set.
+* Fix mount of bugs, including scroll bar. Enables possibility to navigate through pages using the scroll bar.
+
 ### From v1.2 to v1.3 :
 
 * Now import *MagneticScroll* using braces { }
@@ -158,7 +163,7 @@ Included in this setup is a setup to do just that.
 
 ## Dev roadmap :
 
-### Coming soon v1.4 :
+### Coming soon v1.5 :
 
 * Possibility to set up custom easing transitions functions
 * Add more easing transitions functions (bounce, etc...)
