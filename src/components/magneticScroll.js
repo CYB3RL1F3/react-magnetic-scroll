@@ -69,6 +69,7 @@ class MagneticScroll extends Component {
     window.addEventListener('touchmove', this.onScroll, { passive: false });
     window.addEventListener('touchstart', this.onTouch, { passive: false });
     window.addEventListener('keydown', this.onKeydown);
+    window.addEventListener('beforeunload', () => this.unlockScroll());
     this.lockScroll();
     if (!isMobile()) window.addEventListener('resize', this.onResize);
     this.currentPageIndex = this.getCurrentPageIndex();
@@ -84,6 +85,7 @@ class MagneticScroll extends Component {
     window.removeEventListener('touchmove', this.onScroll);
     window.removeEventListener('touchstart', this.onTouch);
     window.removeEventListener('keydown', this.onKeydown);
+    this.unlockScroll();
   }
 
   onPageChangeStart = () => {
@@ -265,6 +267,7 @@ class MagneticScroll extends Component {
   }
 
   scrollTo(page) {
+    this.scrollingByBar = true;
     this.currentPageIndex = page;
     this.scrollToCurrentPage();
   }
