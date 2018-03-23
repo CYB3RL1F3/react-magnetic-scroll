@@ -69,6 +69,7 @@ class MagneticScroll extends Component {
     window.addEventListener('touchmove', this.onScroll, { passive: false });
     window.addEventListener('touchstart', this.onTouch, { passive: false });
     window.addEventListener('keydown', this.onKeydown);
+    this.lockScroll();
     if (!isMobile()) window.addEventListener('resize', this.onResize);
     this.currentPageIndex = this.getCurrentPageIndex();
     // scroll events
@@ -146,6 +147,7 @@ class MagneticScroll extends Component {
   onResize = e => this.resize(e)
 
   onScrollStart = () => {
+    this.unlockScroll();
     if (this.dir === 'up') {
       this.onScrollUpStart();
     } else {
@@ -155,6 +157,7 @@ class MagneticScroll extends Component {
   }
 
   onScrollFinished = () => {
+    this.lockScroll();
     if (this.dir === 'up') {
       this.onScrollUpEnd();
     } else {
@@ -200,6 +203,7 @@ class MagneticScroll extends Component {
     return this.getNbPages() * this.state.pageHeight;
   }
 
+  scrollPosition = 0;
   currentPageIndex = 0;
   ts = null;
   animating = false;
@@ -217,6 +221,19 @@ class MagneticScroll extends Component {
   }
 
   checkAsc = delta => (this.asc > 0 && this.asc < delta) || (this.asc < 0 && this.asc > delta)
+
+  lockScroll = () => {
+    this.scrollPosition = window.pageYOffset;
+    window.addEventListener('scroll', this.stuckScrollToCurrentPosition)
+  }
+
+  unlockScroll = () => {
+    window.removeEventListener('scroll', this.stuckScrollToCurrentPosition)
+  }
+
+  stuckScrollToCurrentPosition = () => {
+    window.scrollTo(0, this.scrollPosition);
+  }
 
   resize() {
     if (!this.scrolling) {
