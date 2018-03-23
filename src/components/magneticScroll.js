@@ -241,10 +241,10 @@ class MagneticScroll extends Component {
     if (!this.scrolling && !this.scrollingByBar) {
       if (window.pageYOffset > this.scrollPosition + threshold) {
         this.scrollingByBar = true;
-        this.scrollTo(this.currentPageIndex + 1);
+        this.scrollDown();
       } else if (window.pageYOffset < this.scrollPosition - threshold) {
         this.scrollingByBar = true;
-        this.scrollTo(this.currentPageIndex - 1);
+        this.scrollUp();
       } else {
         window.scrollTo(0, this.scrollPosition);
       }
