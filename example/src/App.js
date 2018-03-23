@@ -4,6 +4,13 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  componentDidMount() {
+    window.addEventListener('beforeunload', () => {
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 1);
+    })
+  }
   pageEnd = () => {
     console.log('PAGE END');
   }

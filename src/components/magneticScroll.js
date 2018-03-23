@@ -158,6 +158,9 @@ class MagneticScroll extends Component {
 
   onScrollFinished = () => {
     this.lockScroll();
+    setTimeout(() => {
+      this.scrollingByBar = false;
+    }, 100);
     if (this.dir === 'up') {
       this.onScrollUpEnd();
     } else {
@@ -210,6 +213,7 @@ class MagneticScroll extends Component {
   pageHeight = 0;
   pageWidth = 0;
   scrolling = false;
+  scrollingByBar = false;
   asc=0;
   dir=null;
 
@@ -232,7 +236,19 @@ class MagneticScroll extends Component {
   }
 
   stuckScrollToCurrentPosition = () => {
-    window.scrollTo(0, this.scrollPosition);
+
+    const threshold = 5;
+    if (!this.scrolling && !this.scrollingByBar) {
+      if (window.pageYOffset > this.scrollPosition + threshold) {
+        this.scrollingByBar = true;
+        this.scrollTo(this.currentPageIndex + 1);
+      } else if (window.pageYOffset < this.scrollPosition - threshold) {
+        this.scrollingByBar = true;
+        this.scrollTo(this.currentPageIndex - 1);
+      } else {
+        window.scrollTo(0, this.scrollPosition);
+      }
+    }
   }
 
   resize() {
