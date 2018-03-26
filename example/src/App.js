@@ -88,6 +88,7 @@ class App extends Component {
           onScrollDownStart={this.scrollDownStart}
           easing="easeInOutQuad"
           withRef
+          forceScrollOnResize
           ref={(magneticScroll) => { this.magneticScroll = magneticScroll; }}
         />
       </div>

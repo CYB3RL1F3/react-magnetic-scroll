@@ -27,6 +27,7 @@ class MagneticScroll extends Component {
     style: PropTypes.shape(),
     pageStyle: PropTypes.shape(),
     increment: PropTypes.number,
+    forceScrollOnResize: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -47,6 +48,7 @@ class MagneticScroll extends Component {
     style: {},
     pageStyle: {},
     increment: 10,
+    forceScrollOnResize: false,
   }
 
   constructor(props) {
@@ -256,12 +258,18 @@ class MagneticScroll extends Component {
   resize() {
     if (!this.scrolling) {
       debounce(() => {
+        const wh = this.state.pageHeight;
         setTimeout(() => {
           this.setState({
             pageWidth: vw(this.props.pageWidth),
             pageHeight: vh(this.props.pageHeight),
           });
-        }, 200);
+          if (this.props.forceScrollOnResize) {
+            setTimeout(() => {
+              this.forceScrollTo(vh(this.props.pageHeight * this.currentPageIndex));
+            }, 250);
+          }
+        }, 80);
       }, 100);
     }
   }
@@ -334,6 +342,16 @@ class MagneticScroll extends Component {
         this.scrolling = false;
       }
     }
+  }
+
+  forceAnimateScrollTo(top) {
+    this.unlockScroll();
+    this.animateScrollTo(top)
+  }
+
+  forceScrollTo(top) {
+    this.unlockScroll();
+    window.scrollTo(0, top)
   }
 
   render() {
