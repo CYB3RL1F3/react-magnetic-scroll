@@ -45,7 +45,7 @@ current version : 1.3.0
     </MagneticPage>
   );
   const page3 = (
-    <MagneticPage id="page2">
+    <MagneticPage id="page3">
       <div id="birthdaycake">
         <p>page 3</p>
       </div>
